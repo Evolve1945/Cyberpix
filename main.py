@@ -9,7 +9,7 @@ import sys
 
 
 class GameObject:
-    def __init__(self,image, x_pos, y_pos , speed):
+    def __init__(self,image, x_pos, y_pos, speed):
         self.speed = speed
         self.image = pygame.image.load(image)
         self.vel_y = 0
