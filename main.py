@@ -109,9 +109,11 @@ objects.append(loading_bar)
 pnj1 = GameObject('./sprites/pnj/people/1/idle/idle_ (1).png',300, 900, 1)
 pnj2 = GameObject('./sprites/pnj/people/2/idle/idle_ (1).png', 750, 900, 1)
 pnj5 = GameObject('./sprites/pnj/people/5/idle/idle_ (1).png', 1700, 900, 1)
+pet1 = GameObject('.sprites/pnj/animals/4/idle/idle_ (1).png', 950,900,1)
 pnjs.append(pnj1)
 pnjs.append(pnj2)
 pnjs.append(pnj5)
+pnjs.append(pet1)
 
 
 
