@@ -25,9 +25,9 @@ class GameObject:
         self.sprites = []
         self.current_sprite = 0
 
-        self.pnj_walk = False
-        self.pnj_walk_cycle = 0
-        self.pnj_side = 0
+        self.npc_walk = False
+        self.npc_walk_cycle = 0
+        self.npc_side = 0
 
 
 
@@ -81,28 +81,28 @@ class GameObject:
 def move(npc : object, path_idle : str, path_walk : str, nb_anim_idle: int, nb_anim_walk : int, anim_time : float) -> None :
     npc.anim(path_idle, nb_anim_idle)
 
-    if not npc.pnj_walk:
+    if not npc.npc_walk:
         if random.randint(0, 100) < 1:
-            npc.pnj_walk = True
-            npc.pnj_side = random.randint(0, 1)
+            npc.npc_walk = True
+            npc.npc_side = random.randint(0, 1)
 
-    if npc.pnj_walk:
+    if npc.npc_walk:
 
-        if npc.pnj_side == 1:
+        if npc.npc_side == 1:
             npc.move(right=True)
             npc.flip = 0
             npc.anim(path_walk, nb_anim_walk, anim_time)
 
 
-        elif npc.pnj_side == 0:
+        elif npc.npc_side == 0:
             npc.move(left=True)
             npc.flip += 1
             npc.anim(path_walk, nb_anim_walk, anim_time)
 
-        npc.pnj_walk_cycle += 1
-        if npc.pnj_walk_cycle > random.randint(0, 10000):
-            npc.pnj_walk_cycle = 0
-            npc.pnj_walk = False
+        npc.npc_walk_cycle += 1
+        if npc.npc_walk_cycle > random.randint(0, 10000):
+            npc.npc_walk_cycle = 0
+            npc.npc_walk = False
 
     print(npc.flip)
 
@@ -118,7 +118,7 @@ background = pygame.transform.scale(background, (1920, 1080))
 
 
 objects = []
-pnjs = []
+npcs = []
 
 player_hand = GameObject('sprites/characters/Biker/guns/hands/one_hand/hand_ (3).png',100,1000,2)
 objects.append(player_hand)
@@ -129,20 +129,20 @@ objects.append(p)
 loading_bar = GameObject('./sprites/UI/loading_bar_test/loading_ (1).png',1000, 500, 2)
 objects.append(loading_bar)
 
-#pnjs
+#npcs
 
 
-pnj1 = GameObject('./sprites/pnj/people/1/idle/idle_ (1).png',300, 900, 1)
-pnj2 = GameObject('./sprites/pnj/people/2/idle/idle_ (1).png', 750, 900, 1)
-pnj5 = GameObject('./sprites/pnj/people/5/idle/idle_ (1).png', 1700, 900, 1)
-pet4 = GameObject('./sprites/pnj/animals/4/idle/idle_ (1).png', 950, 900, 1)
-pet6 = GameObject('./sprites/pnj/animals/6/idle/idle_ (1).png', 1375, 900, 1)
+npc1 = GameObject('./sprites/npc/people/1/idle/idle_ (1).png',300, 900, 1)
+npc2 = GameObject('./sprites/npc/people/2/idle/idle_ (1).png', 750, 900, 1)
+npc5 = GameObject('./sprites/npc/people/5/idle/idle_ (1).png', 1700, 900, 1)
+pet4 = GameObject('./sprites/npc/animals/4/idle/idle_ (1).png', 950, 900, 1)
+pet6 = GameObject('./sprites/npc/animals/6/idle/idle_ (1).png', 1375, 900, 1)
 
-pnjs.append(pnj1)
-pnjs.append(pnj2)
-pnjs.append(pnj5)
-pnjs.append(pet4)
-pnjs.append(pet6)
+npcs.append(npc1)
+npcs.append(npc2)
+npcs.append(npc5)
+npcs.append(pet4)
+npcs.append(pet6)
 
 
 
@@ -380,26 +380,26 @@ while True:
         o.move()
         screen.blit(o.image, o.pos)
 
-    #PNJS
+    #npcS
 
-    for pnj in pnjs:
-        pnj.move()
-        screen.blit(pnj.image, pnj.pos)
+    for npc in npcs:
+        npc.move()
+        screen.blit(npc.image, npc.pos)
 
-    #PNJ 1
-    move(pnj1,'./sprites/pnj/people/1/idle/idle_','./sprites/pnj/people/1/walk/walk_',10,6,0.025)
+    #npc 1
+    move(npc1,'./sprites/npc/people/1/idle/idle_','./sprites/npc/people/1/walk/walk_',10,6,0.025)
 
-    # PNJ 2
-    move(pnj2,'./sprites/pnj/people/2/idle/idle_','./sprites/pnj/people/2/walk/walk_',4,6,0.025)
+    # npc 2
+    move(npc2,'./sprites/npc/people/2/idle/idle_','./sprites/npc/people/2/walk/walk_',4,6,0.025)
 
-    #PNJ 5
-    move(pnj5,'./sprites/pnj/people/5/idle/idle_','./sprites/pnj/people/5/walk/walk_',4,6,0.025)
+    #npc 5
+    move(npc5,'./sprites/npc/people/5/idle/idle_','./sprites/npc/people/5/walk/walk_',4,6,0.025)
 
     # PET 4
-    move(pet4,'./sprites/pnj/animals/4/idle/idle_','./sprites/pnj/animals/4/walk/walk_',4,6,0.04)
+    move(pet4,'./sprites/npc/animals/4/idle/idle_','./sprites/npc/animals/4/walk/walk_',4,6,0.04)
 
     # PET 6
-    move(pet6,'./sprites/pnj/animals/6/idle/idle_','./sprites/pnj/animals/6/walk/walk_',4,4,0.04)
+    move(pet6,'./sprites/npc/animals/6/idle/idle_','./sprites/npc/animals/6/walk/walk_',4,4,0.04)
 
 
 
