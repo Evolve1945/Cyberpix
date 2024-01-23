@@ -109,11 +109,14 @@ objects.append(loading_bar)
 pnj1 = GameObject('./sprites/pnj/people/1/idle/idle_ (1).png',300, 900, 1)
 pnj2 = GameObject('./sprites/pnj/people/2/idle/idle_ (1).png', 750, 900, 1)
 pnj5 = GameObject('./sprites/pnj/people/5/idle/idle_ (1).png', 1700, 900, 1)
-pet1 = GameObject('.sprites/pnj/animals/4/idle/idle_ (1).png', 950,900,1)
+pet4 = GameObject('./sprites/pnj/animals/4/idle/idle_ (1).png', 950, 900, 1)
+pet6 = GameObject('./sprites/pnj/animals/6/idle/idle_ (1).png', 1375, 900, 1)
+
 pnjs.append(pnj1)
 pnjs.append(pnj2)
 pnjs.append(pnj5)
-pnjs.append(pet1)
+pnjs.append(pet4)
+pnjs.append(pet6)
 
 
 
@@ -441,6 +444,67 @@ while True:
             pnj5.pnj_walk = False
 
     print(pnj5.flip)
+
+    # PET 4
+
+    pet4.anim('./sprites/pnj/animals/4/idle/idle_', 4)
+
+    if pet4.pnj_walk == False:
+        if random.randint(0, 100) < 1:
+            pet4.pnj_walk = True
+            pet4.pnj_side = random.randint(0, 1)
+
+    if pet4.pnj_walk:
+
+        if pet4.pnj_side == 1:
+            pet4.move(right=True)
+            pet4.flip = 0
+            pet4.anim('./sprites/pnj/animals/4/walk/walk_', 6, 0.04)
+
+
+        elif pet4.pnj_side == 0:
+            pet4.move(left=True)
+            pet4.flip += 1
+            pet4.anim('./sprites/pnj/animals/4/walk/walk_', 6, 0.04)
+
+        pet4.pnj_walk_cycle += 1
+        if pet4.pnj_walk_cycle > random.randint(0, 10000):
+            pet4.pnj_walk_cycle = 0
+            pet4.pnj_walk = False
+
+    print(pet4.flip)
+
+    # PET 6
+
+    pet6.anim('./sprites/pnj/animals/6/idle/idle_', 4)
+
+    if not pet6.pnj_walk :
+        if random.randint(0, 100) < 1:
+            pet6.pnj_walk = True
+            pet6.pnj_side = random.randint(0, 1)
+
+    if pet6.pnj_walk:
+
+        if pet6.pnj_side == 1:
+            pet6.move(right=True)
+            pet6.flip = 0
+            pet6.anim('./sprites/pnj/animals/6/walk/walk_', 4, 0.04)
+
+
+        elif pet6.pnj_side == 0:
+            pet6.move(left=True)
+            pet6.flip += 1
+            pet6.anim('./sprites/pnj/animals/6/walk/walk_', 4, 0.04)
+
+        pet6.pnj_walk_cycle += 1
+        if pet6.pnj_walk_cycle > random.randint(0, 10000):
+            pet6.pnj_walk_cycle = 0
+            pet6.pnj_walk = False
+
+    print(pet6.flip)
+
+
+
 
     pygame.display.update()
     clock.tick(60)
