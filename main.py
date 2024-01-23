@@ -356,8 +356,6 @@ while True:
         screen.blit(pnj.image, pnj.pos)
 
     pnj1.anim('./sprites/pnj/people/1/idle/idle_',10)
-    pnj2.anim('./sprites/pnj/people/2/idle/idle_', 4)
-    pnj2.anim('./sprites/pnj/people/5/idle/idle_', 4)
 
     #PNJ 1
     if pnj1.pnj_walk == False :
@@ -385,34 +383,39 @@ while True:
 
     print(pnj1.flip)
 
-    #PNJ 2
-    if pnj2.pnj_walk == False :
-        if random.randint(0, 100) < 1 :
+    # PNJ 2
+    pnj2.anim('./sprites/pnj/people/2/idle/idle_', 4)
+
+    if pnj2.pnj_walk == False:
+        if random.randint(0, 100) < 1:
             pnj2.pnj_walk = True
-            pnj2.pnj_side = random.randint(0,1)
+            pnj2.pnj_side = random.randint(0, 1)
 
-    if pnj2.pnj_walk :
+    if pnj2.pnj_walk:
 
-        if pnj2.pnj_side == 1 :
+        if pnj2.pnj_side == 1:
             pnj2.move(right=True)
             pnj2.flip = 0
-            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.0025)
+            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.025)
 
 
-        elif pnj2.pnj_side == 0 :
+        elif pnj2.pnj_side == 0:
             pnj2.move(left=True)
             pnj2.flip += 1
-            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.0025)
+            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.025)
 
         pnj2.pnj_walk_cycle += 1
-        if pnj2.pnj_walk_cycle > random.randint(0, 10000) :
+        if pnj2.pnj_walk_cycle > random.randint(0, 10000):
             pnj2.pnj_walk_cycle = 0
             pnj2.pnj_walk = False
 
     print(pnj2.flip)
 
-    # PNJ 5
-    if not pnj5.pnj_walk :
+    #PNJ 5
+
+    pnj5.anim('./sprites/pnj/people/5/idle/idle_', 4)
+
+    if pnj5.pnj_walk == False:
         if random.randint(0, 100) < 1:
             pnj5.pnj_walk = True
             pnj5.pnj_side = random.randint(0, 1)
@@ -436,7 +439,6 @@ while True:
             pnj5.pnj_walk = False
 
     print(pnj5.flip)
-
 
     pygame.display.update()
     clock.tick(60)
