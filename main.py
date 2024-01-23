@@ -78,7 +78,33 @@ class GameObject:
           self.pos.left = 10
 
 
+def move(npc : object, path_idle : str, path_walk : str, nb_anim_idle: int, nb_anim_walk : int, anim_time : float) -> None :
+    npc.anim(path_idle, nb_anim_idle)
 
+    if not npc.pnj_walk:
+        if random.randint(0, 100) < 1:
+            npc.pnj_walk = True
+            npc.pnj_side = random.randint(0, 1)
+
+    if npc.pnj_walk:
+
+        if npc.pnj_side == 1:
+            npc.move(right=True)
+            npc.flip = 0
+            npc.anim(path_walk, nb_anim_walk, anim_time)
+
+
+        elif npc.pnj_side == 0:
+            npc.move(left=True)
+            npc.flip += 1
+            npc.anim(path_walk, nb_anim_walk, anim_time)
+
+        npc.pnj_walk_cycle += 1
+        if npc.pnj_walk_cycle > random.randint(0, 10000):
+            npc.pnj_walk_cycle = 0
+            npc.pnj_walk = False
+
+    print(npc.flip)
 
 
 
@@ -360,153 +386,29 @@ while True:
         pnj.move()
         screen.blit(pnj.image, pnj.pos)
 
-    pnj1.anim('./sprites/pnj/people/1/idle/idle_',10)
-
     #PNJ 1
-    if pnj1.pnj_walk == False :
-        if random.randint(0, 100) < 1 :
-            pnj1.pnj_walk = True
-            pnj1.pnj_side = random.randint(0,1)
-
-    if pnj1.pnj_walk :
-
-        if pnj1.pnj_side == 1 :
-            pnj1.move(right=True)
-            pnj1.flip = 0
-            pnj1.anim('./sprites/pnj/people/1/walk/walk_', 6, 0.025)
-
-
-        elif pnj1.pnj_side == 0 :
-            pnj1.move(left=True)
-            pnj1.flip += 1
-            pnj1.anim('./sprites/pnj/people/1/walk/walk_', 6, 0.025)
-
-        pnj1.pnj_walk_cycle += 1
-        if pnj1.pnj_walk_cycle > random.randint(0, 10000) :
-            pnj1.pnj_walk_cycle = 0
-            pnj1.pnj_walk = False
-
-    print(pnj1.flip)
+    move(pnj1,'./sprites/pnj/people/1/idle/idle_','./sprites/pnj/people/1/walk/walk_',10,6,0.025)
 
     # PNJ 2
-    pnj2.anim('./sprites/pnj/people/2/idle/idle_', 4)
-
-    if pnj2.pnj_walk == False:
-        if random.randint(0, 100) < 1:
-            pnj2.pnj_walk = True
-            pnj2.pnj_side = random.randint(0, 1)
-
-    if pnj2.pnj_walk:
-
-        if pnj2.pnj_side == 1:
-            pnj2.move(right=True)
-            pnj2.flip = 0
-            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.025)
-
-
-        elif pnj2.pnj_side == 0:
-            pnj2.move(left=True)
-            pnj2.flip += 1
-            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.025)
-
-        pnj2.pnj_walk_cycle += 1
-        if pnj2.pnj_walk_cycle > random.randint(0, 10000):
-            pnj2.pnj_walk_cycle = 0
-            pnj2.pnj_walk = False
-
-    print(pnj2.flip)
+    move(pnj2,'./sprites/pnj/people/2/idle/idle_','./sprites/pnj/people/2/walk/walk_',4,6,0.025)
 
     #PNJ 5
-
-    pnj5.anim('./sprites/pnj/people/5/idle/idle_', 4)
-
-    if pnj5.pnj_walk == False:
-        if random.randint(0, 100) < 1:
-            pnj5.pnj_walk = True
-            pnj5.pnj_side = random.randint(0, 1)
-
-    if pnj5.pnj_walk:
-
-        if pnj5.pnj_side == 1:
-            pnj5.move(right=True)
-            pnj5.flip = 0
-            pnj5.anim('./sprites/pnj/people/5/walk/walk_', 6, 0.025)
-
-
-        elif pnj5.pnj_side == 0:
-            pnj5.move(left=True)
-            pnj5.flip += 1
-            pnj5.anim('./sprites/pnj/people/5/walk/walk_', 6, 0.025)
-
-        pnj5.pnj_walk_cycle += 1
-        if pnj5.pnj_walk_cycle > random.randint(0, 10000):
-            pnj5.pnj_walk_cycle = 0
-            pnj5.pnj_walk = False
-
-    print(pnj5.flip)
+    move(pnj5,'./sprites/pnj/people/5/idle/idle_','./sprites/pnj/people/5/walk/walk_',4,6,0.025)
 
     # PET 4
-
-    pet4.anim('./sprites/pnj/animals/4/idle/idle_', 4)
-
-    if pet4.pnj_walk == False:
-        if random.randint(0, 100) < 1:
-            pet4.pnj_walk = True
-            pet4.pnj_side = random.randint(0, 1)
-
-    if pet4.pnj_walk:
-
-        if pet4.pnj_side == 1:
-            pet4.move(right=True)
-            pet4.flip = 0
-            pet4.anim('./sprites/pnj/animals/4/walk/walk_', 6, 0.04)
-
-
-        elif pet4.pnj_side == 0:
-            pet4.move(left=True)
-            pet4.flip += 1
-            pet4.anim('./sprites/pnj/animals/4/walk/walk_', 6, 0.04)
-
-        pet4.pnj_walk_cycle += 1
-        if pet4.pnj_walk_cycle > random.randint(0, 10000):
-            pet4.pnj_walk_cycle = 0
-            pet4.pnj_walk = False
-
-    print(pet4.flip)
+    move(pet4,'./sprites/pnj/animals/4/idle/idle_','./sprites/pnj/animals/4/walk/walk_',4,6,0.04)
 
     # PET 6
+    move(pet6,'./sprites/pnj/animals/6/idle/idle_','./sprites/pnj/animals/6/walk/walk_',4,4,0.04)
 
-    pet6.anim('./sprites/pnj/animals/6/idle/idle_', 4)
-
-    if not pet6.pnj_walk :
-        if random.randint(0, 100) < 1:
-            pet6.pnj_walk = True
-            pet6.pnj_side = random.randint(0, 1)
-
-    if pet6.pnj_walk:
-
-        if pet6.pnj_side == 1:
-            pet6.move(right=True)
-            pet6.flip = 0
-            pet6.anim('./sprites/pnj/animals/6/walk/walk_', 4, 0.04)
-
-
-        elif pet6.pnj_side == 0:
-            pet6.move(left=True)
-            pet6.flip += 1
-            pet6.anim('./sprites/pnj/animals/6/walk/walk_', 4, 0.04)
-
-        pet6.pnj_walk_cycle += 1
-        if pet6.pnj_walk_cycle > random.randint(0, 10000):
-            pet6.pnj_walk_cycle = 0
-            pet6.pnj_walk = False
-
-    print(pet6.flip)
 
 
 
 
     pygame.display.update()
     clock.tick(60)
+
+
+
 
 
