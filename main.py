@@ -99,12 +99,17 @@ def move(npc : object, path_idle : str, path_walk : str, nb_anim_idle: int, nb_a
             npc.flip += 1
             npc.anim(path_walk, nb_anim_walk, anim_time)
 
+
+
+
+
         npc.npc_walk_cycle += 1
         if npc.npc_walk_cycle > random.randint(0, 10000):
             npc.npc_walk_cycle = 0
             npc.npc_walk = False
 
     print(npc.flip)
+
 
 
 
