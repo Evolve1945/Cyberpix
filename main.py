@@ -28,6 +28,9 @@ class GameObject:
         self.npc_walk = False
         self.npc_walk_cycle = 0
         self.npc_side = 0
+        self.hitbox = self.image.get_rect()
+        self.hitbox.x = x_pos
+        self.hitbox.y = y_pos
 
 
 
@@ -131,8 +134,14 @@ objects.append(player_hand)
 p = GameObject('./sprites/characters/Biker/idle/idle_ (1).png',960, 900, 2)          #create the player object
 objects.append(p)
 
-loading_bar = GameObject('./sprites/UI/loading_bar_test/loading_ (1).png',1000, 500, 2)
+loading_bar = GameObject('./sprites/UI/loading_bar_test/loading_ (1).png',1500, 150, 2)
 objects.append(loading_bar)
+
+# center the background on the player p
+background_rect = background.get_rect(center=p.pos.center)
+screen.blit(background, background_rect)
+zoomed_image = pygame.transform.scale(p.image, (120, 120))
+screen.blit(zoomed_image, (960 - 60, 900 - 60))
 
 #npcs
 
@@ -195,7 +204,7 @@ while True:
 
     screen.blit(background,(0,0))
 
-
+    
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_SPACE]:
@@ -240,7 +249,10 @@ while True:
                     p.anim('./sprites/characters/Biker/crouch/crouch_', 4)
 
 
+    if keys[pygame.K_ESCAPE] :
+        sys.exit()
 
+    
     #PLAYER DASH
     if keys[pygame.K_LCTRL]:
 
@@ -406,7 +418,35 @@ while True:
     # PET 6
     move(pet6,'./sprites/npc/animals/6/idle/idle_','./sprites/npc/animals/6/walk/walk_',4,4,0.04)
 
+    camera_x = p.pos.x - screen.get_width() / 2
+    camera_y = p.pos.y - screen.get_height() / 2
 
+    for o in objects:
+        o.move()
+        screen.blit(o.image, o.pos.move(-camera_x, -camera_y))
+
+    #npcS
+
+    for npc in npcs:
+        npc.move()
+        screen.blit(npc.image, npc.pos.move(-camera_x, -camera_y))
+    
+    
+
+    #npc 1
+    move(npc1,'./sprites/npc/people/1/idle/idle_','./sprites/npc/people/1/walk/walk_',10,6,0.025)
+
+    # npc 2
+    move(npc2,'./sprites/npc/people/2/idle/idle_','./sprites/npc/people/2/walk/walk_',4,6,0.025)
+
+    #npc 5
+    move(npc5,'./sprites/npc/people/5/idle/idle_','./sprites/npc/people/5/walk/walk_',4,6,0.025)
+
+    # PET 4
+    move(pet4,'./sprites/npc/animals/4/idle/idle_','./sprites/npc/animals/4/walk/walk_',4,6,0.04)
+
+    # PET 6
+    move(pet6,'./sprites/npc/animals/6/idle/idle_','./sprites/npc/animals/6/walk/walk_',4,4,0.04)
 
 
 
