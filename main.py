@@ -4,6 +4,8 @@ import pygame
 
 import sys
 import tkinter as tk
+import tkinter as tk
+import os
 
 import pygame.font
 
@@ -257,6 +259,8 @@ while True:
 
 
     if keys[pygame.K_ESCAPE] :
+        
+        
         sys.exit()
 
     
@@ -467,11 +471,25 @@ while True:
                 display_message()
                 sys.exit()
 
+    # Limit player movement between 2 x positions
+    if p.pos.x < 100:
+        p.pos.x = 100
+    elif p.pos.x > 1700:
+        p.pos.x = 1700
+
     pygame.display.update()
     clock.tick(60)
 
+    # Check if player clicks left click
+    if left:
+        # Check if player touches an npc
+        for npc in npcs:
+            if p.pos.colliderect(npc.pos):
+                # Player wins
+                print("You win!")
+                display_message()
+                sys.exit()
 
-
-
-
+    pygame.display.update()
+    clock.tick(60)
     
