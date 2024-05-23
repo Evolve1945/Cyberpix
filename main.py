@@ -3,6 +3,9 @@ import random
 import pygame
 
 import sys
+import tkinter as tk
+
+import pygame.font
 
 
 
@@ -114,7 +117,11 @@ def move(npc : object, path_idle : str, path_walk : str, nb_anim_idle: int, nb_a
     print(npc.flip)
 
 
-
+def display_message():
+                    root = tk.Tk()
+                    label = tk.Label(root, text="You win!")
+                    label.pack()
+                    root.mainloop()
 
 
 screen = pygame.display.set_mode((1920,1080))
@@ -440,6 +447,8 @@ while True:
     move(npc2,'./sprites/npc/people/2/idle/idle_','./sprites/npc/people/2/walk/walk_',4,6,0.025)
 
     #npc 5
+    import pygame.font
+
     move(npc5,'./sprites/npc/people/5/idle/idle_','./sprites/npc/people/5/walk/walk_',4,6,0.025)
 
     # PET 4
@@ -448,7 +457,15 @@ while True:
     # PET 6
     move(pet6,'./sprites/npc/animals/6/idle/idle_','./sprites/npc/animals/6/walk/walk_',4,4,0.04)
 
-
+    # Check if player clicks left click
+    if left:
+        # Check if player touches an npc
+        for npc in npcs:
+            if p.pos.colliderect(npc.pos):
+                # Player wins
+                print("You win!")
+                display_message()
+                sys.exit()
 
     pygame.display.update()
     clock.tick(60)
@@ -457,3 +474,4 @@ while True:
 
 
 
+    
