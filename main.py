@@ -3,6 +3,11 @@ import random
 import pygame
 
 import sys
+import tkinter as tk
+import tkinter as tk
+import os
+
+import pygame.font
 
 
 
@@ -25,9 +30,12 @@ class GameObject:
         self.sprites = []
         self.current_sprite = 0
 
-        self.pnj_walk = False
-        self.pnj_walk_cycle = 0
-        self.pnj_side = 0
+        self.npc_walk = False
+        self.npc_walk_cycle = 0
+        self.npc_side = 0
+        self.hitbox = self.image.get_rect()
+        self.hitbox.x = x_pos
+        self.hitbox.y = y_pos
 
 
 
@@ -78,9 +86,44 @@ class GameObject:
           self.pos.left = 10
 
 
+def move(npc : object, path_idle : str, path_walk : str, nb_anim_idle: int, nb_anim_walk : int, anim_time : float) -> None :
+    npc.anim(path_idle, nb_anim_idle)
+
+    if not npc.npc_walk:
+        if random.randint(0, 100) < 1:
+            npc.npc_walk = True
+            npc.npc_side = random.randint(0, 1)
+
+    if npc.npc_walk:
+
+        if npc.npc_side == 1:
+            npc.move(right=True)
+            npc.flip = 0
+            npc.anim(path_walk, nb_anim_walk, anim_time)
+
+
+        elif npc.npc_side == 0:
+            npc.move(left=True)
+            npc.flip += 1
+            npc.anim(path_walk, nb_anim_walk, anim_time)
 
 
 
+
+
+        npc.npc_walk_cycle += 1
+        if npc.npc_walk_cycle > random.randint(0, 10000):
+            npc.npc_walk_cycle = 0
+            npc.npc_walk = False
+
+    print(npc.flip)
+
+
+def display_message():
+                    root = tk.Tk()
+                    label = tk.Label(root, text="You win!")
+                    label.pack()
+                    root.mainloop()
 
 
 screen = pygame.display.set_mode((1920,1080))
@@ -92,7 +135,7 @@ background = pygame.transform.scale(background, (1920, 1080))
 
 
 objects = []
-pnjs = []
+npcs = []
 
 player_hand = GameObject('sprites/characters/Biker/guns/hands/one_hand/hand_ (3).png',100,1000,2)
 objects.append(player_hand)
@@ -100,23 +143,29 @@ objects.append(player_hand)
 p = GameObject('./sprites/characters/Biker/idle/idle_ (1).png',960, 900, 2)          #create the player object
 objects.append(p)
 
-loading_bar = GameObject('./sprites/UI/loading_bar_test/loading_ (1).png',1000, 500, 2)
+loading_bar = GameObject('./sprites/UI/loading_bar_test/loading_ (1).png',1500, 150, 2)
 objects.append(loading_bar)
 
-#pnjs
+# center the background on the player p
+background_rect = background.get_rect(center=p.pos.center)
+screen.blit(background, background_rect)
+zoomed_image = pygame.transform.scale(p.image, (120, 120))
+screen.blit(zoomed_image, (960 - 60, 900 - 60))
+
+#npcs
 
 
-pnj1 = GameObject('./sprites/pnj/people/1/idle/idle_ (1).png',300, 900, 1)
-pnj2 = GameObject('./sprites/pnj/people/2/idle/idle_ (1).png', 750, 900, 1)
-pnj5 = GameObject('./sprites/pnj/people/5/idle/idle_ (1).png', 1700, 900, 1)
-pet4 = GameObject('./sprites/pnj/animals/4/idle/idle_ (1).png', 950, 900, 1)
-pet6 = GameObject('./sprites/pnj/animals/6/idle/idle_ (1).png', 1375, 900, 1)
+npc1 = GameObject('./sprites/npc/people/1/idle/idle_ (1).png',300, 900, 1)
+npc2 = GameObject('./sprites/npc/people/2/idle/idle_ (1).png', 750, 900, 1)
+npc5 = GameObject('./sprites/npc/people/5/idle/idle_ (1).png', 1700, 900, 1)
+pet4 = GameObject('./sprites/npc/animals/4/idle/idle_ (1).png', 950, 900, 1)
+pet6 = GameObject('./sprites/npc/animals/6/idle/idle_ (1).png', 1375, 900, 1)
 
-pnjs.append(pnj1)
-pnjs.append(pnj2)
-pnjs.append(pnj5)
-pnjs.append(pet4)
-pnjs.append(pet6)
+npcs.append(npc1)
+npcs.append(npc2)
+npcs.append(npc5)
+npcs.append(pet4)
+npcs.append(pet6)
 
 
 
@@ -164,7 +213,7 @@ while True:
 
     screen.blit(background,(0,0))
 
-
+    
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_SPACE]:
@@ -209,7 +258,12 @@ while True:
                     p.anim('./sprites/characters/Biker/crouch/crouch_', 4)
 
 
+    if keys[pygame.K_ESCAPE] :
+        
+        
+        sys.exit()
 
+    
     #PLAYER DASH
     if keys[pygame.K_LCTRL]:
 
@@ -354,159 +408,88 @@ while True:
         o.move()
         screen.blit(o.image, o.pos)
 
-    #PNJS
+    #npcS
 
-    for pnj in pnjs:
-        pnj.move()
-        screen.blit(pnj.image, pnj.pos)
+    for npc in npcs:
+        npc.move()
+        screen.blit(npc.image, npc.pos)
 
-    pnj1.anim('./sprites/pnj/people/1/idle/idle_',10)
+    #npc 1
+    move(npc1,'./sprites/npc/people/1/idle/idle_','./sprites/npc/people/1/walk/walk_',10,6,0.025)
 
-    #PNJ 1
-    if pnj1.pnj_walk == False :
-        if random.randint(0, 100) < 1 :
-            pnj1.pnj_walk = True
-            pnj1.pnj_side = random.randint(0,1)
+    # npc 2
+    move(npc2,'./sprites/npc/people/2/idle/idle_','./sprites/npc/people/2/walk/walk_',4,6,0.025)
 
-    if pnj1.pnj_walk :
-
-        if pnj1.pnj_side == 1 :
-            pnj1.move(right=True)
-            pnj1.flip = 0
-            pnj1.anim('./sprites/pnj/people/1/walk/walk_', 6, 0.025)
-
-
-        elif pnj1.pnj_side == 0 :
-            pnj1.move(left=True)
-            pnj1.flip += 1
-            pnj1.anim('./sprites/pnj/people/1/walk/walk_', 6, 0.025)
-
-        pnj1.pnj_walk_cycle += 1
-        if pnj1.pnj_walk_cycle > random.randint(0, 10000) :
-            pnj1.pnj_walk_cycle = 0
-            pnj1.pnj_walk = False
-
-    print(pnj1.flip)
-
-    # PNJ 2
-    pnj2.anim('./sprites/pnj/people/2/idle/idle_', 4)
-
-    if pnj2.pnj_walk == False:
-        if random.randint(0, 100) < 1:
-            pnj2.pnj_walk = True
-            pnj2.pnj_side = random.randint(0, 1)
-
-    if pnj2.pnj_walk:
-
-        if pnj2.pnj_side == 1:
-            pnj2.move(right=True)
-            pnj2.flip = 0
-            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.025)
-
-
-        elif pnj2.pnj_side == 0:
-            pnj2.move(left=True)
-            pnj2.flip += 1
-            pnj2.anim('./sprites/pnj/people/2/walk/walk_', 6, 0.025)
-
-        pnj2.pnj_walk_cycle += 1
-        if pnj2.pnj_walk_cycle > random.randint(0, 10000):
-            pnj2.pnj_walk_cycle = 0
-            pnj2.pnj_walk = False
-
-    print(pnj2.flip)
-
-    #PNJ 5
-
-    pnj5.anim('./sprites/pnj/people/5/idle/idle_', 4)
-
-    if pnj5.pnj_walk == False:
-        if random.randint(0, 100) < 1:
-            pnj5.pnj_walk = True
-            pnj5.pnj_side = random.randint(0, 1)
-
-    if pnj5.pnj_walk:
-
-        if pnj5.pnj_side == 1:
-            pnj5.move(right=True)
-            pnj5.flip = 0
-            pnj5.anim('./sprites/pnj/people/5/walk/walk_', 6, 0.025)
-
-
-        elif pnj5.pnj_side == 0:
-            pnj5.move(left=True)
-            pnj5.flip += 1
-            pnj5.anim('./sprites/pnj/people/5/walk/walk_', 6, 0.025)
-
-        pnj5.pnj_walk_cycle += 1
-        if pnj5.pnj_walk_cycle > random.randint(0, 10000):
-            pnj5.pnj_walk_cycle = 0
-            pnj5.pnj_walk = False
-
-    print(pnj5.flip)
+    #npc 5
+    move(npc5,'./sprites/npc/people/5/idle/idle_','./sprites/npc/people/5/walk/walk_',4,6,0.025)
 
     # PET 4
-
-    pet4.anim('./sprites/pnj/animals/4/idle/idle_', 4)
-
-    if pet4.pnj_walk == False:
-        if random.randint(0, 100) < 1:
-            pet4.pnj_walk = True
-            pet4.pnj_side = random.randint(0, 1)
-
-    if pet4.pnj_walk:
-
-        if pet4.pnj_side == 1:
-            pet4.move(right=True)
-            pet4.flip = 0
-            pet4.anim('./sprites/pnj/animals/4/walk/walk_', 6, 0.04)
-
-
-        elif pet4.pnj_side == 0:
-            pet4.move(left=True)
-            pet4.flip += 1
-            pet4.anim('./sprites/pnj/animals/4/walk/walk_', 6, 0.04)
-
-        pet4.pnj_walk_cycle += 1
-        if pet4.pnj_walk_cycle > random.randint(0, 10000):
-            pet4.pnj_walk_cycle = 0
-            pet4.pnj_walk = False
-
-    print(pet4.flip)
+    move(pet4,'./sprites/npc/animals/4/idle/idle_','./sprites/npc/animals/4/walk/walk_',4,6,0.04)
 
     # PET 6
+    move(pet6,'./sprites/npc/animals/6/idle/idle_','./sprites/npc/animals/6/walk/walk_',4,4,0.04)
 
-    pet6.anim('./sprites/pnj/animals/6/idle/idle_', 4)
+    camera_x = p.pos.x - screen.get_width() / 2
+    camera_y = p.pos.y - screen.get_height() / 2
 
-    if not pet6.pnj_walk :
-        if random.randint(0, 100) < 1:
-            pet6.pnj_walk = True
-            pet6.pnj_side = random.randint(0, 1)
+    for o in objects:
+        o.move()
+        screen.blit(o.image, o.pos.move(-camera_x, -camera_y))
 
-    if pet6.pnj_walk:
+    #npcS
 
-        if pet6.pnj_side == 1:
-            pet6.move(right=True)
-            pet6.flip = 0
-            pet6.anim('./sprites/pnj/animals/6/walk/walk_', 4, 0.04)
+    for npc in npcs:
+        npc.move()
+        screen.blit(npc.image, npc.pos.move(-camera_x, -camera_y))
+    
+    
 
+    #npc 1
+    move(npc1,'./sprites/npc/people/1/idle/idle_','./sprites/npc/people/1/walk/walk_',10,6,0.025)
 
-        elif pet6.pnj_side == 0:
-            pet6.move(left=True)
-            pet6.flip += 1
-            pet6.anim('./sprites/pnj/animals/6/walk/walk_', 4, 0.04)
+    # npc 2
+    move(npc2,'./sprites/npc/people/2/idle/idle_','./sprites/npc/people/2/walk/walk_',4,6,0.025)
 
-        pet6.pnj_walk_cycle += 1
-        if pet6.pnj_walk_cycle > random.randint(0, 10000):
-            pet6.pnj_walk_cycle = 0
-            pet6.pnj_walk = False
+    #npc 5
+    import pygame.font
 
-    print(pet6.flip)
+    move(npc5,'./sprites/npc/people/5/idle/idle_','./sprites/npc/people/5/walk/walk_',4,6,0.025)
 
+    # PET 4
+    move(pet4,'./sprites/npc/animals/4/idle/idle_','./sprites/npc/animals/4/walk/walk_',4,6,0.04)
 
+    # PET 6
+    move(pet6,'./sprites/npc/animals/6/idle/idle_','./sprites/npc/animals/6/walk/walk_',4,4,0.04)
 
+    # Check if player clicks left click
+    if left:
+        # Check if player touches an npc
+        for npc in npcs:
+            if p.pos.colliderect(npc.pos):
+                # Player wins
+                print("You win!")
+                display_message()
+                sys.exit()
+
+    # Limit player movement between 2 x positions
+    if p.pos.x < 100:
+        p.pos.x = 100
+    elif p.pos.x > 1700:
+        p.pos.x = 1700
 
     pygame.display.update()
     clock.tick(60)
 
+    # Check if player clicks left click
+    if left:
+        # Check if player touches an npc
+        for npc in npcs:
+            if p.pos.colliderect(npc.pos):
+                # Player wins
+                print("You win!")
+                display_message()
+                sys.exit()
 
+    pygame.display.update()
+    clock.tick(120)
+    
